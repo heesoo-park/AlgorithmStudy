@@ -1,0 +1,14 @@
+# 카드 구매하기
+# 작은 수의 값을 구하고 그 값들을 이용해서 정답을 구하는 바텀 업 방식.
+# 이중 for문 안에서 왜 2개의 합으로만 조건문을 하는 건가 싶었는데 dp리스트에 최대값이 들어가있는 상태이기 때문이라는 것을 깨달았다
+n = int(input())
+dp = [0] * (n+1)
+values = [0] + list(map(int, input().split()))
+dp[1] = values[1]
+
+for i in range(2,n+1):
+    for j in range(1,i+1):
+        if dp[i] < dp[i-j] + values[j]:
+            dp[i] = dp[i-j] + values[j]
+
+print(dp[n])

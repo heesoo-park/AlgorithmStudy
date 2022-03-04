@@ -1,0 +1,23 @@
+# 퇴사
+# 입력받은 두 가지를 이용해서 DP를 수행
+# 앞에서부터가 아닌 뒤에서부터 진행하며 퇴사날짜를 넘기는 것을 기준으로 최대수익을 구함
+# 이 문제가 처음으로 두 개의 입력값을 가지고 DP를 수행한 문제이다.
+
+n = int(input())
+
+time = []
+value = []
+dp = [0]*(n+1)
+
+for i in range(n):
+    a,b = map(int, input().split())
+    time.append(a)
+    value.append(b)
+
+for i in range(n-1, -1, -1):
+    if i + time[i] > n:
+        dp[i] = dp[i+1]
+    else:
+        dp[i] = max(dp[i+1], value[i] + dp[i+time[i]])
+
+print(dp[0])

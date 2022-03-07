@@ -1,0 +1,23 @@
+# 일곱 난쟁이
+# 브루트포스 첫 문제
+# 다 넣고 7개를 더하는 식이 아니라 2개를 빼는 식으로 전체 반복함
+# 조건에 맞는 2개의 수가 나오면 뒤 인덱스의 값부터 제거하고 앞의 값 제거
+# 이중 break로 반복문을 탈출하여 정렬하고 출력
+
+h = []
+
+for _ in range(9):
+    h.append(int(input()))
+
+for i in range(8):
+    for j in range(i+1, 9):
+        if sum(h) - (h[i]+h[j]) == 100:
+            h.remove(h[j])
+            h.remove(h[i])
+            break
+    if len(h) == 7:
+        break
+print()
+h.sort()
+for x in h:
+    print(x)

@@ -1,0 +1,55 @@
+# 사탕 게임
+# 전형적인 브루트 포스 문제다. 그냥 싹다 돌면 된다. 하지만 중복 검사하는 부분은 제외하자.
+# 인접한 두개의 사탕이 위치를 바꿀 수 있는 방향은 사방위이고 이 중 2개씩은 이전 반복문에서 실행되기 때문에 제외하면 된다.
+
+import sys
+input = sys.stdin.readline
+
+def swap_check(arr):
+    n = len(arr)
+    ans = 1
+
+    for i in range(n):
+        col_cnt = 1
+        for j in range(1,n):
+            if arr[i][j] == arr[i][j-1]:
+                col_cnt += 1
+            else:
+                col_cnt = 1
+
+            if col_cnt > ans:
+                ans = col_cnt
+        row_cnt = 1
+        for j in range(1,n):
+            if arr[j][i] == arr[j-1][i]:
+                row_cnt += 1
+            else:
+                row_cnt = 1
+
+            if row_cnt > ans:
+                ans = row_cnt
+    return ans
+
+n = int(input())
+arr = [list(input()) for _ in range(n)]
+answer = 0
+
+for i in range(n):
+    for j in range(n):
+        if j+1 < n:
+            arr[i][j], arr[i][j+1] = arr[i][j+1], arr[i][j]
+            temp = swap_check(arr)
+            if temp > answer:
+                answer = temp
+
+            arr[i][j], arr[i][j+1] = arr[i][j+1], arr[i][j]
+
+        if i+1 < n:
+            arr[i][j], arr[i+1][j] = arr[i+1][j], arr[i][j]
+            temp = swap_check(arr)
+            if temp > answer:
+                answer = temp
+
+            arr[i][j], arr[i+1][j] = arr[i+1][j], arr[i][j]
+
+print(answer)

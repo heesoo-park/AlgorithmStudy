@@ -1,0 +1,23 @@
+# 리모컨
+# 처음에 문제를 읽는데 이해를 못해서 애를 먹었다
+# 왜 문자로 바꾸는지 모르다가 반복문을 돌 때 각 채널의 자릿수를 체크할 때 필요하다는 것을 보고 이해했다
+
+target = int(input())
+n = int(input())
+numbers = [str(i) for i in range(10)]
+remove_key = list(map(str, input().split()))
+
+if n != 0:
+    numbers = [i for i in numbers if i not in remove_key]
+
+init = 100
+diff = abs(init - target)
+
+for i in range(1000000):
+    for j in range(len(str(i))):
+        if str(i)[j] not in numbers:
+            break
+        elif j == len(str(i)) - 1:
+            diff = min(diff, abs(i - target) + len(str(i)))
+            
+print(diff)

@@ -1,0 +1,90 @@
+# 테트로미노
+# 첫시도는 실패, 모든 케이스를 일일히 넣어서 구현했지만 제출했더니 "틀렸습니다."가 나왔다.
+# 이후에 구글링을 통해 답 찾아볼 예정
+
+N, M = map(int, input().split())
+
+map = [list(map(int, input().split())) for _ in range(N)]
+score = 0
+#
+for i in range(N):
+    for j in range(M-3):
+        temp = map[i][j] + map[i][j+1] + map[i][j+2] + map[i][j+3]
+        score = max(score, temp)
+for i in range(N-3):
+    for j in range(M):
+        temp = map[i][j] + map[i+1][j] + map[i+2][j] + map[i+3][j]
+        score = max(score, temp)
+#
+for i in range(N-1):
+    for j in range(M-1):
+        temp = map[i][j] + map[i][j+1] + map[i+1][j] + map[i+1][j+1]
+        score = max(score, temp)
+#
+for i in range(N-2):
+    for j in range(M-1):
+        temp = map[i][j] + map[i+1][j] + map[i+2][j] + map[i+2][j+1]
+        score = max(score, temp)
+for i in range(N-2):
+    for j in range(M-1):
+        temp = map[i][j] + map[i+1][j] + map[i+2][j] + map[i+2][j+1]
+        score = max(score, temp)
+for i in range(N-2):
+    for j in range(M-1):
+        temp = map[i][j] + map[i+1][j] + map[i+2][j] + map[i+2][j+1]
+        score = max(score, temp)
+for i in range(N-1):
+    for j in range(M-2):
+        temp = map[i][j+2] + map[i+1][j] + map[i+1][j+1] + map[i+1][j+2]
+        score = max(score, temp)
+for i in range(N-2):
+    for j in range(M-1):
+        temp = map[i][j+1] + map[i+1][j+1] + map[i+2][j+1] + map[i+2][j]
+        score = max(score, temp)
+for i in range(N-1):
+    for j in range(M-2):
+        temp = map[i][j] + map[i+1][j] + map[i+1][j+1] + map[i+1][j+2]
+        score = max(score, temp)
+for i in range(N-2):
+    for j in range(M-1):
+        temp = map[i][j] + map[i][j+1] + map[i+1][j] + map[i+2][j]
+        score = max(score, temp)
+for i in range(N-1):
+    for j in range(M-2):
+        temp = map[i][j] + map[i][j+1] + map[i][j+2] + map[i+1][j+2]
+        score = max(score, temp)
+#
+for i in range(N-1):
+    for j in range(M-2):
+        temp = map[i+1][j] + map[i+1][j+1] + map[i][j+1] + map[i][j+2]
+        score = max(score, temp)
+for i in range(N-2):
+    for j in range(M-1):
+        temp = map[i][j] + map[i+1][j] + map[i+1][j+1] + map[i+2][j+1]
+        score = max(score, temp)
+for i in range(N-1):
+    for j in range(M-2):
+        temp = map[i][j] + map[i][j+1] + map[i+1][j+1] + map[i+1][j+2]
+        score = max(score, temp)
+for i in range(N-2):
+    for j in range(M-1):
+        temp = map[i][j+1] + map[i+1][j] + map[i+1][j+1] + map[i+2][j]
+        score = max(score, temp)
+#
+for i in range(N-1):
+    for j in range(M-2):
+        temp = map[i][j] + map[i][j+1] + map[i][j+2] + map[i+1][j+1]
+        score = max(score, temp)
+for i in range(N-2):
+    for j in range(M-1):
+        temp = map[i+1][j] + map[i][j+1] + map[i+1][j+1] + map[i+2][j+1]
+        score = max(score, temp)
+for i in range(N-1):
+    for j in range(M-2):
+        temp = map[i][j+1] + map[i+1][j] + map[i+1][j+1] + map[i+1][j+2]
+        score = max(score, temp)
+for i in range(N-2):
+    for j in range(M-1):
+        temp = map[i][j] + map[i+1][j] + map[i+2][j] + map[i+1][j+1]
+        score = max(score, temp)
+print(score)

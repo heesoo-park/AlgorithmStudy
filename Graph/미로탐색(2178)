@@ -1,0 +1,70 @@
+// 미로 탐색(2178)
+#include <iostream>
+#include <vector>
+#include <queue>
+
+int N, M;
+bool visited[101][101];
+int count[101][101];
+char map[101][101];
+
+int dx[4] = { 1,-1,0,0 };
+int dy[4] = { 0,0,1,-1 };
+
+void solve(int start_x, int start_y)
+{
+	std::queue<std::pair<int,int>> q;
+
+	visited[start_x][start_y] = true;
+	count[start_x][start_y]++;
+	
+	q.push(std::pair<int, int>(start_x, start_y));
+
+	while (!q.empty())
+	{
+		int cur_x = q.front().first;
+		int cur_y = q.front().second;
+
+		q.pop();
+
+		for (int i = 0; i < 4; i++)
+		{
+			int new_x = cur_x + dx[i];
+			int new_y = cur_y + dy[i];
+
+			if (new_x < 1 || new_x > N || new_y < 1 || new_y > M)
+				continue;
+
+			if (visited[new_x][new_y])
+				continue;
+
+			if (map[new_x][new_y] == '0')
+				continue;
+
+			visited[new_x][new_y] = true;
+			count[new_x][new_y] = count[cur_x][cur_y] + 1;
+			q.push(std::pair<int, int>(new_x, new_y));
+		}
+	}
+}
+
+int main()
+{
+	std::ios_base::sync_with_stdio(false);
+	std::cin.tie(NULL);
+	std::cout.tie(NULL);
+
+	std::cin >> N >> M;
+
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < M; j++)
+		{
+			std::cin >> map[i + 1][j + 1];
+		}
+	}
+
+	solve(1,1);
+
+	std::cout << count[N][M] << std::endl;
+}

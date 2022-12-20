@@ -1,0 +1,98 @@
+// 단지번호붙이기(2677)
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm>
+
+int N;
+int map[26][26];
+bool visited[26][26];
+std::vector<int> complex;
+
+int dx[4] = { 1,-1,0,0 };
+int dy[4] = { 0,0,1,-1 };
+
+void bfs(int start_x, int start_y)
+{
+	if (map[start_x][start_y] == 0)
+		return;
+
+	if (visited[start_x][start_y])
+		return;
+
+	std::queue<std::pair<int, int>> q;
+
+	visited[start_x][start_y] = true;
+
+	q.push(std::pair<int, int>(start_x, start_y));
+	int num = 1;
+
+	while (!q.empty())
+	{
+		int cur_x = q.front().first;
+		int cur_y = q.front().second;
+
+		q.pop();
+
+		for (int i = 0; i < 4; i++)
+		{
+			int new_x = cur_x + dx[i];
+			int new_y = cur_y + dy[i];
+
+			if (new_x < 1 || new_x > N || new_y < 1 || new_y > N)
+				continue;
+
+			if (visited[new_x][new_y])
+				continue;
+
+			if (map[new_x][new_y] == 0)
+				continue;
+
+			visited[new_x][new_y] = true;
+
+			q.push(std::pair<int, int>(new_x, new_y));
+			num++;
+		}
+	}
+	complex.push_back(num);
+}
+
+void solve()
+{
+	for (int i = 1; i <= N; i++)
+	{
+		for (int j = 1; j <= N; j++)
+		{
+			bfs(i, j);
+		}
+	}
+
+	std::cout << complex.size() << std::endl;
+
+	std::sort(complex.begin(), complex.end());
+	for (int i = 0; i < complex.size(); i++)
+	{
+		std::cout << complex[i] << std::endl;
+	}
+}
+
+int main()
+{
+	std::ios_base::sync_with_stdio(false);
+	std::cin.tie(NULL);
+	std::cout.tie(NULL);
+
+	std::cin >> N;
+
+	for (int i = 0; i < N; i++)
+	{
+		char ch;
+		for (int j = 0; j < N; j++)
+		{
+			std::cin >> ch;
+			map[i + 1][j + 1] = ch - '0';
+		}
+	}
+
+	solve();
+}

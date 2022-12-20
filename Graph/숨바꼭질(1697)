@@ -1,0 +1,105 @@
+// 숨바꼭질(1697)
+#include <iostream>
+#include <vector>
+#include <queue>
+
+int N, K;
+int visited[100010];
+
+int solve()
+{
+	std::queue<std::pair<int,int>> q;
+	visited[N] = true;
+	q.push({ N,0 });
+
+	while (!q.empty())
+	{
+		int cur_pos = q.front().first;
+		int cur_cost = q.front().second;
+
+		q.pop();
+
+		if (cur_pos == K)
+			return cur_cost;
+
+		if (cur_pos - 1 >= 0 && visited[cur_pos - 1] == false)
+		{
+			visited[cur_pos - 1] = true;
+			q.push({ cur_pos - 1, cur_cost + 1 });
+		}
+
+		if (cur_pos + 1 < 100010 && visited[cur_pos + 1] == false)
+		{
+			visited[cur_pos + 1] = true;
+			q.push({ cur_pos + 1, cur_cost + 1 });
+		}
+
+		if (cur_pos * 2 < 100010 && visited[cur_pos * 2] == false)
+		{
+			visited[cur_pos * 2] = true;
+			q.push({ cur_pos * 2,cur_cost + 1 });
+		}
+	}
+}
+
+int main()
+{
+	std::ios_base::sync_with_stdio(false);
+	std::cin.tie(NULL);
+	std::cout.tie(NULL);
+
+	std::cin >> N >> K;
+
+	std::cout << solve() << std::endl;
+}
+
+
+// 숨바꼭질(1697) - 틀린 풀이
+#include <iostream>
+#include <vector>
+#include <queue>
+
+int N, K;
+int visited[100010];
+int count[100010];
+
+void solve()
+{
+	std::queue<int> q;
+
+	visited[N] = true;
+	q.push(N);
+
+	while (!q.empty())
+	{
+		int cur_pos = q.front();
+
+		q.pop();
+
+		if (cur_pos == K)
+			break;
+
+		if (cur_pos - 1 >= 0 && visited[cur_pos - 1] == false)
+		{
+			visited[cur_pos - 1] = true;
+			q.push(cur_pos - 1);
+			count[cur_pos - 1] = count[cur_pos] + 1;
+		}
+
+		if (cur_pos + 1 <= K && visited[cur_pos + 1] == false)
+		{
+			visited[cur_pos + 1] = true;
+			q.push(cur_pos + 1);
+			count[cur_pos + 1] = count[cur_pos] + 1;
+		}
+
+		if (cur_pos * 2 <= K && cur_pos * 2 > 0 && visited[cur_pos * 2] == false)
+		{
+			visited[cur_pos * 2] = true;
+			q.push(cur_pos * 2);
+			count[cur_pos * 2] = count[cur_pos] + 1;
+		}
+	}
+
+	std::cout << count[K] << std::endl;
+}

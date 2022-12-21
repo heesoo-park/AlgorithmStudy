@@ -1,0 +1,81 @@
+// 나이트의 이동(7562)
+#include <iostream>
+#include <vector>
+#include <queue>
+
+int T, size;
+int count[300][300];
+bool visited[300][300];
+std::pair<int, int> start_pos, dest_pos;
+
+int dx[8] = { 1,2,-1,-2,1,2,-1,-2 };
+int dy[8] = { -2,-1,-2,-1,2,1,2,1 };
+
+void reset()
+{
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < size; j++)
+		{
+			count[i][j] = 0;
+			visited[i][j] = false;
+		}
+	}
+}
+
+void solve()
+{
+	std::queue<std::pair<int, int>> q;
+
+	visited[start_pos.first][start_pos.second] = true;
+	q.push({ start_pos.first, start_pos.second });
+
+	while (!q.empty())
+	{
+		int cur_x = q.front().first;
+		int cur_y = q.front().second;
+
+		q.pop();
+
+		if (cur_x == dest_pos.first && cur_y == dest_pos.second)
+			break;
+
+		for (int i = 0; i < 8; i++)
+		{
+			int new_x = cur_x + dx[i];
+			int new_y = cur_y + dy[i];
+
+			if (new_x < 0 || new_x >= size || new_y < 0 || new_y >= size)
+				continue;
+
+			if (visited[new_x][new_y])
+				continue;
+
+			visited[new_x][new_y] = true;
+			count[new_x][new_y] = count[cur_x][cur_y] + 1;
+			q.push({ new_x, new_y });
+		}
+	}
+
+	std::cout << count[dest_pos.first][dest_pos.second] << std::endl;
+}
+
+int main()
+{
+	std::ios_base::sync_with_stdio(false);
+	std::cin.tie(NULL);
+	std::cout.tie(NULL);
+
+	std::cin >> T;
+
+	for (int t = 0; t < T; t++)
+	{
+		std::cin >> size;
+
+		std::cin >> start_pos.first >> start_pos.second;
+		std::cin >> dest_pos.first >> dest_pos.second;
+
+		solve();
+		reset();
+	}
+}

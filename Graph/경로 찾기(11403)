@@ -1,0 +1,47 @@
+#include <iostream>
+#include <vector>
+#include <cstring>
+
+int N;
+std::vector<int> route[100];
+int visited[100];
+
+void solve(int start_pos)
+{
+	int size = route[start_pos].size();
+	for (int i = 0; i < size; i++)
+	{
+		if (!visited[route[start_pos][i]])
+		{
+			visited[route[start_pos][i]] = 1;
+			solve(route[start_pos][i]);
+		}
+	}
+}
+
+int main()
+{
+	std::cin >> N;
+
+	int val;
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < N; j++)
+		{
+			std::cin >> val;
+			if (val)
+				route[i].push_back(j);
+		}
+	}
+
+	for (int i = 0; i < N; i++)
+	{
+		memset(visited, 0, sizeof(visited));
+		solve(i);
+		for (int j = 0; j < N; j++)
+		{
+			std::cout << visited[j] << ' ';
+		}
+		std::cout << std::endl;
+	}
+}

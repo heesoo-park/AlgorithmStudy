@@ -1,0 +1,59 @@
+// 스타트링크(5014)
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm>
+
+int F, S, G, U, D;
+bool visited[1000001];
+
+void solve()
+{
+	std::queue<std::pair<int, int>> q;
+	int answer = -1;
+
+	visited[S] = true;
+	q.push({ S,0 });
+
+	while (!q.empty())
+	{
+		int cur_pos = q.front().first;
+		int cur_cost = q.front().second;
+
+		q.pop();
+
+		if (cur_pos == G)
+		{
+			answer = cur_cost;
+			break;
+		}
+
+		if (cur_pos + U <= F && visited[cur_pos + U] == false)
+		{
+			visited[cur_pos + U] = true;
+			q.push({ cur_pos + U, cur_cost + 1 });
+		}
+
+		if (cur_pos - D > 0 && visited[cur_pos - D] == false)
+		{
+			visited[cur_pos - D] = true;
+			q.push({ cur_pos - D, cur_cost + 1 });
+		}
+	}
+
+	if (answer == -1)
+		std::cout << "use the stairs" << std::endl;
+	else
+		std::cout << answer << std::endl;
+}
+
+int main()
+{
+	std::ios_base::sync_with_stdio(false);
+	std::cin.tie(NULL);
+	std::cout.tie(NULL);
+
+	std::cin >> F >> S >> G >> U >> D;
+
+	solve();
+}

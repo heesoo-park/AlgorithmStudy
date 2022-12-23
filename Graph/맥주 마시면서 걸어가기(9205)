@@ -1,0 +1,79 @@
+// 맥주 마시면서 걸어가기(9205)
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <cstring>
+#include <cstdlib>
+
+int t;
+std::vector<std::pair<int, int>> pos;
+std::vector<int> relation[102];
+int visited[102];
+
+void dfs(int start_pos)
+{
+	int start_size = relation[start_pos].size();
+	for (int i = 0; i < start_size; i++)
+	{
+		if (!visited[relation[start_pos][i]])
+		{
+			visited[relation[start_pos][i]] = 1;
+			dfs(relation[start_pos][i]);
+		}
+	}
+}
+
+void solve(int num)
+{
+	int size = num + 2;
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < size; j++)
+		{
+			if (i == j)
+				continue;
+
+			if (abs(pos[j].first - pos[i].first) + abs(pos[j].second - pos[i].second) <= 1000)
+				relation[i].push_back(j);
+		}
+	}
+
+	dfs(0);
+
+	if (visited[num+1])
+		std::cout << "happy" << std::endl;
+	else
+		std::cout << "sad" << std::endl;
+}
+
+int main()
+{
+	std::ios_base::sync_with_stdio(false);
+	std::cin.tie(NULL);
+	std::cout.tie(NULL);
+
+	std::cin >> t;
+	for (int i = 0; i < t; i++)
+	{
+		int num;
+		std::pair<int, int> home, store, dest;
+
+		std::cin >> num;
+
+		std::cin >> home.first >> home.second;
+		pos.push_back(home);
+		for (int j = 0; j < num; j++)
+		{
+			std::cin >> store.first >> store.second;
+			pos.push_back(store);
+		}
+		std::cin >> dest.first >> dest.second;
+		pos.push_back(dest);
+
+		memset(visited, 0, sizeof(visited));
+		memset(relation, 0, sizeof(relation));
+		solve(num);
+
+		pos.clear();
+	}
+}

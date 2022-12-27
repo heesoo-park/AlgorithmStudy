@@ -1,0 +1,53 @@
+// 1로 만들기2(12852)
+#include <iostream>
+
+int dp[1000002];
+
+void solve(int num)
+{
+	dp[1] = 0;
+	dp[2] = 1;
+	dp[3] = 1;
+
+	for (int i = 4; i <= num; i++)
+	{
+		dp[i] = 10000;
+	}
+
+	for (int i = 4; i <= num; i++)
+	{
+		if (i % 3 == 0) 
+			dp[i] = std::min(dp[i / 3] + 1, dp[i]);
+		if (i % 2 == 0)
+			dp[i] = std::min(dp[i / 2] + 1, dp[i]);
+		dp[i] = std::min(dp[i - 1] + 1, dp[i]);
+	}
+
+	std::cout << dp[num] << std::endl;
+
+	while (1)
+	{
+		std::cout << num << ' ';
+		if (num == 1) break;
+		if (num % 3 == 0 && (dp[num / 3] + 1 == dp[num]))
+			num /= 3;
+		else if (num % 2 == 0 && (dp[num / 2] + 1 == dp[num]))
+			num /= 2;
+		else
+			num--;
+	}
+}
+
+int main()
+{
+	std::ios_base::sync_with_stdio(false);
+	std::cin.tie(NULL);
+	std::cout.tie(NULL);
+
+	int n;
+	std::cin >> n;
+
+	solve(n);
+
+	return 0;
+}

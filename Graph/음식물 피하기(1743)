@@ -1,0 +1,79 @@
+// 음식물 피하기(1743)
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm>
+
+int N, M, K;
+int map[101][101];
+bool visited[101][101];
+std::vector<int> garbage_size;
+
+int dx[4] = { 1,-1,0,0 };
+int dy[4] = { 0,0,1,-1 };
+
+void solve(int start_x, int start_y)
+{
+	std::queue<std::pair<int, int>> q;
+	int count = 0;
+
+	visited[start_x][start_y] = true;
+	q.push({ start_x,start_y });
+	count++;
+
+	while (!q.empty())
+	{
+		int cur_x = q.front().first;
+		int cur_y = q.front().second;
+
+		q.pop();
+
+		for (int i = 0; i < 4; i++)
+		{
+			int new_x = cur_x + dx[i];
+			int new_y = cur_y + dy[i];
+
+			if (new_x > N || new_x < 1 || new_y > M || new_y < 1)
+				continue;
+			if (visited[new_x][new_y])
+				continue;
+			if (map[new_x][new_y] == 0)
+				continue;
+
+			visited[new_x][new_y] = true;
+			q.push({ new_x,new_y });
+			count++;
+		}
+	}
+
+	garbage_size.push_back(count);
+}
+
+int main()
+{
+	std::ios_base::sync_with_stdio(false);
+	std::cin.tie(NULL);
+	std::cout.tie(NULL);
+
+	std::cin >> N >> M >> K;
+
+	int x, y;
+	for (int i = 0; i < K; i++)
+	{
+		std::cin >> x >> y;
+		map[x][y] = 1;
+	}
+
+	for (int i = 1; i <= N; i++)
+	{
+		for (int j = 1; j <= M; j++)
+		{
+			if(!visited[i][j] && map[i][j] != 0)
+				solve(i, j);
+		}
+	}
+
+	std::sort(garbage_size.rbegin(), garbage_size.rend());
+
+	std::cout << garbage_size.front() << std::endl;
+}

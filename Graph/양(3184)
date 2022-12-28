@@ -1,0 +1,84 @@
+// 양(3184)
+#include <iostream>
+#include <vector>
+#include <queue>
+
+int R, C;
+char map[251][251];
+bool visited[251][251];
+int sheep, wolf;
+
+int dx[4] = { 1,-1,0,0 };
+int dy[4] = { 0,0,1,-1 };
+
+void solve(int start_x, int start_y)
+{
+	std::queue<std::pair<int, int>> q;
+	int sheepIn = 0;
+	int wolfIn = 0;
+
+	visited[start_x][start_y] = true;
+	q.push({ start_x, start_y });
+
+	while (!q.empty())
+	{
+		int cur_x = q.front().first;
+		int cur_y = q.front().second;
+
+		if (map[cur_x][cur_y] == 'v')
+			wolfIn++;
+		else if (map[cur_x][cur_y] == 'o')
+			sheepIn++;
+
+		q.pop();
+
+		for (int i = 0; i < 4; i++)
+		{
+			int new_x = cur_x + dx[i];
+			int new_y = cur_y + dy[i];
+
+			if (new_x < 1 || new_x > R || new_y < 1 || new_y > C)
+				continue;
+			if (visited[new_x][new_y])
+				continue;
+			if (map[new_x][new_y] == '#')
+				continue;
+
+			visited[new_x][new_y] = true;
+			q.push({ new_x, new_y });
+		}
+	}
+
+	if (wolfIn >= sheepIn)
+		wolf += wolfIn;
+	else
+		sheep += sheepIn;
+}
+
+int main()
+{
+	std::ios_base::sync_with_stdio(false);
+	std::cin.tie(NULL);
+	std::cout.tie(NULL);
+
+	std::cin >> R >> C;
+
+	for (int i = 1; i <= R; i++)
+	{
+		for (int j = 1; j <= C; j++)
+		{
+			std::cin >> map[i][j];
+		}
+	}
+
+	for (int i = 1; i <= R; i++)
+	{
+		for (int j = 1; j <= C; j++)
+		{
+			if (!visited[i][j] && map[i][j] != '#')
+				solve(i, j);
+		}
+	}
+
+	std::cout << sheep << ' ' << wolf;
+}

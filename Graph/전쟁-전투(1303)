@@ -1,0 +1,86 @@
+// 전쟁-전투(1303)
+#include <iostream>
+#include <vector>
+#include <queue>
+
+int N, M;
+char map[101][101];
+bool visited[101][101];
+int Blue, White;
+
+int dx[4] = { 1,-1,0,0 };
+int dy[4] = { 0,0,1,-1 };
+
+void solve(int start_x, int start_y)
+{
+	std::queue<std::pair<int, int>> q;
+	int count = 0;
+	char soldier = ' ';
+	visited[start_x][start_y] = true;
+	if (map[start_x][start_y] == 'B')
+		soldier = 'B';
+	else
+		soldier = 'W';
+
+	q.push({ start_x, start_y });
+
+	while (!q.empty())
+	{
+		int cur_x = q.front().first;
+		int cur_y = q.front().second;
+
+		if (map[cur_x][cur_y] == soldier)
+			count++;
+
+		q.pop();
+
+		for (int i = 0; i < 4; i++)
+		{
+			int new_x = cur_x + dx[i];
+			int new_y = cur_y + dy[i];
+
+			if (new_x < 1 || new_x > N || new_y < 1 || new_y > M)
+				continue;
+			if (visited[new_x][new_y])
+				continue;
+			if (map[new_x][new_y] != soldier)
+				continue;
+
+			visited[new_x][new_y] = true;
+			q.push({ new_x, new_y });
+		}
+	}
+
+	if (soldier == 'B')
+		Blue += (count * count);
+	else
+		White += (count * count);
+}
+
+int main()
+{
+	std::ios_base::sync_with_stdio(false);
+	std::cin.tie(NULL);
+	std::cout.tie(NULL);
+
+	std::cin >> M >> N; // 왜 거꾸로 해야지 통과하는 걸까나?
+
+	for (int i = 1; i <= N; i++)
+	{
+		for (int j = 1; j <= M; j++)
+		{
+			std::cin >> map[i][j];
+		}
+	}
+
+	for (int i = 1; i <= N; i++)
+	{
+		for (int j = 1; j <= M; j++)
+		{
+			if (!visited[i][j])
+				solve(i, j);
+		}
+	}
+
+	std::cout << White << ' ' << Blue;
+}

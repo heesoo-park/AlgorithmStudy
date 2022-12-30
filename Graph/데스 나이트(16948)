@@ -1,0 +1,66 @@
+// 데스 나이트(16948)
+#include <iostream>
+#include <vector>
+#include <queue>
+
+int N;
+int map[201][201];
+bool visited[201][201];
+std::pair<int, int> start, end;
+
+int dx[6] = { -2,-2,0,0,2,2 };
+int dy[6] = { -1,1,-2,2,-1,1 };
+
+void solve()
+{
+	std::queue<std::pair<int, int>> q;
+
+	visited[start.first][start.second] = true;
+	q.push(start);
+
+	while (!q.empty())
+	{
+		int cur_x = q.front().first;
+		int cur_y = q.front().second;
+
+		q.pop();
+
+		for (int i = 0; i < 6; i++)
+		{
+			int new_x = cur_x + dx[i];
+			int new_y = cur_y + dy[i];
+
+			if (new_x > N || new_x < 0 || new_y > N || new_y < 0)
+				continue;
+			if (visited[new_x][new_y])
+				continue;
+
+			visited[new_x][new_y] = true;
+			if (map[new_x][new_y] != 0)
+			{
+				if (map[new_x][new_y] > map[cur_x][cur_y] + 1)
+					map[new_x][new_y] = map[cur_x][cur_y] + 1;
+			}
+			else
+				map[new_x][new_y] = map[cur_x][cur_y] + 1;
+			q.push({ new_x,new_y });
+		}
+	}
+
+	if (map[end.first][end.second] != 0)
+		std::cout << map[end.first][end.second];
+	else
+		std::cout << -1;
+}
+
+int main()
+{
+	std::ios_base::sync_with_stdio(false);
+	std::cin.tie(NULL);
+	std::cout.tie(NULL);
+
+	std::cin >> N;
+	std::cin >> start.first >> start.second >> end.first >> end.second;
+
+	solve();
+}

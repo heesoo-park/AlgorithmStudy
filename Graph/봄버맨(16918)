@@ -1,0 +1,105 @@
+// 봄버맨(16918)
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+int R, C, N;
+char full_O[202][202];
+char map[202][202];
+char temp[202][202];
+
+void solve()
+{
+	for (int i = 0; i < N; i++)
+	{
+		if (i == 0)
+			continue;
+
+		if (i % 2 == 0)
+		{
+			for (int j = 1; j <= R; j++)
+			{
+				for (int k = 1; k <= C; k++)
+				{
+					temp[j][k] = full_O[j][k];
+				}
+			}
+
+			for (int j = 1; j <= R; j++)
+			{
+				for (int k = 1; k <= C; k++)
+				{
+					if (map[j][k] == 'O')
+					{
+						temp[j][k] = '.';
+						temp[j+1][k] = '.';
+						temp[j-1][k] = '.';
+						temp[j][k+1] = '.';
+						temp[j][k-1] = '.';
+					}
+				}
+			}
+
+			for (int j = 1; j <= R; j++)
+			{
+				for (int k = 1; k <= C; k++)
+				{
+					map[j][k] = temp[j][k];
+				}
+			}
+		}
+	}
+
+	if (N % 2 == 0)
+	{
+		for (int i = 1; i <= R; i++)
+		{
+			for (int j = 1; j <= C; j++)
+			{
+				std::cout << full_O[i][j];
+			}
+			std::cout << std::endl;
+		}
+	}
+	else
+	{
+		for (int i = 1; i <= R; i++)
+		{
+			for (int j = 1; j <= C; j++)
+			{
+				std::cout << map[i][j];
+			}
+			std::cout << std::endl;
+		}
+	}
+	
+}
+
+int main()
+{
+	std::ios_base::sync_with_stdio(false);
+	std::cin.tie(NULL);
+	std::cout.tie(NULL);
+
+	std::cin >> R >> C >> N;
+
+	for (int i = 1; i <= R; i++)
+	{
+		for (int j = 1; j <= C; j++)
+		{
+			full_O[i][j] = 'O';
+		}
+	}
+
+	for (int i = 1; i <= R; i++)
+	{
+		std::string str;
+		std::cin >> str;
+		for (int j = 1; j <= str.size(); j++)
+		{
+			map[i][j] = str[j-1];
+		}
+	}
+
+	solve();
+}

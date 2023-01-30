@@ -1,0 +1,545 @@
+// 5번 문제
+//#include <iostream>
+//#include <vector>
+//
+//int T,N;
+//std::vector<int> John;
+//std::vector<int> John_dp_right;
+//std::vector<int> John_dp_left;
+//std::vector<int> Chloe;
+//std::vector<int> Chloe_dp_left;
+//std::vector<int> Chloe_dp_right;
+//
+//int solve()
+//{
+//	std::vector<int> sums_John_right;
+//	std::vector<int> sums_Chloe_left;
+//
+//	std::vector<int> sums_John_left;
+//	std::vector<int> sums_Chloe_right;
+//
+//	sums_John_right.emplace_back(John_dp_right[N-1]);
+//	sums_Chloe_left.emplace_back(Chloe_dp_left[0]);
+//
+//	sums_John_left.emplace_back(John_dp_left[0]);
+//	sums_Chloe_right.emplace_back(Chloe_dp_right[N - 1]);
+//	
+//	for (int i = N-2; i >= 0; i--)
+//	{
+//		// case 1
+//		John_dp_right[i] = std::max(John_dp_right[i], John_dp_right[i + 1] + John[i]);
+//
+//		if (John_dp_right[i] > sums_John_right[N-i-2])
+//			sums_John_right.emplace_back(John_dp_right[i]);
+//		else
+//			sums_John_right.emplace_back(sums_John_right[N-i- 2]);
+//
+//		// case 2
+//		Chloe_dp_right[i] = std::max(Chloe_dp_right[i], Chloe_dp_right[i + 1] + Chloe[i]);
+//
+//		if (Chloe_dp_right[i] > sums_Chloe_right[N - i - 2])
+//			sums_Chloe_right.emplace_back(Chloe_dp_right[i]);
+//		else
+//			sums_Chloe_right.emplace_back(sums_Chloe_right[N - i - 2]);
+//	}
+//
+//	for (int i = 1; i < N; i++)
+//	{
+//		// case 1
+//		Chloe_dp_left[i] = std::max(Chloe_dp_left[i], Chloe_dp_left[i - 1] + Chloe[i]);
+//
+//		if (Chloe_dp_left[i] > sums_Chloe_left[i - 1])
+//			sums_Chloe_left.emplace_back(Chloe_dp_left[i]);
+//		else
+//			sums_Chloe_left.emplace_back(sums_Chloe_left[i - 1]);
+//
+//		// case 2
+//		John_dp_left[i] = std::max(John_dp_left[i], John_dp_left[i - 1] + John[i]);
+//
+//		if (John_dp_left[i] > sums_John_left[i - 1])
+//			sums_John_left.emplace_back(John_dp_left[i]);
+//		else
+//			sums_John_left.emplace_back(sums_John_left[i - 1]);
+//	}
+//
+//	int maxSum1 = sums_Chloe_left[0] + sums_John_right[N - 2];
+//	int maxSum2 = sums_Chloe_right[N - 2] + sums_John_left[0];
+//	for (int i = 1; i < N-1; i++)
+//	{
+//		// case 1
+//		if (maxSum1 < sums_Chloe_left[i] + sums_John_right[N - 2 - i])
+//			maxSum1 = sums_Chloe_left[i] + sums_John_right[N - 2 - i];
+//
+//		// case 2
+//		if (maxSum2 < sums_Chloe_right[N - 2 - i] + sums_John_left[i])
+//			maxSum2 = sums_Chloe_right[N - 2 - i] + sums_John_left[i];
+//	}
+//
+//	return (maxSum2 > maxSum1) ? maxSum2 : maxSum1;
+//}
+//
+//int main()
+//{
+//	std::ios_base::sync_with_stdio(false);
+//	std::cin.tie(NULL);
+//	std::cout.tie(NULL);
+//
+//	std::vector<int> results;
+//
+//	std::cin >> T;
+//	for (int i = 0; i < T; i++)
+//	{
+//		std::cin >> N;
+//
+//		int M;
+//		for (int j = 0; j < N; j++)
+//		{
+//			std::cin >> M;
+//			John.emplace_back(M);
+//			John_dp_right.emplace_back(M);
+//			John_dp_left.emplace_back(M);
+//		}
+//
+//		for (int j = 0; j < N; j++)
+//		{
+//			std::cin >> M;
+//			Chloe.emplace_back(M);
+//			Chloe_dp_left.emplace_back(M);
+//			Chloe_dp_right.emplace_back(M);
+//		}
+//
+//		results.emplace_back(solve());
+//
+//		John.clear();
+//		John_dp_right.clear();
+//		John_dp_left.clear();
+//		Chloe.clear();
+//		Chloe_dp_left.clear();
+//		Chloe_dp_right.clear();
+//	}
+//
+//	for (int i = 0; i < T; i++)
+//	{
+//		std::cout << '#' << i + 1 << ' ' << results[i] << std::endl;
+//	}
+//}
+
+
+// 4번 문제
+//#include <iostream>
+//#include <string>
+//#include <vector>
+//#include <queue>
+//
+//int T, N, M, R, C;
+//int map[11][11];
+//int dist[11][11];
+//bool visited[11][11];
+//
+//int x_dir[4] = { 1, -1, 0, 0 };
+//int y_dir[4] = { 0, 0, 1, -1 };
+//
+//void solve(int start_x, int start_y)
+//{
+//	std::queue<std::pair<int, int>> q;
+//
+//	visited[start_x][start_y] = true;
+//	q.push(std::make_pair(start_x, start_y));
+//	dist[start_x][start_y]++;
+//
+//	while (!q.empty())
+//	{
+//		int cur_x = q.front().first;
+//		int cur_y = q.front().second;
+//
+//		q.pop();
+//
+//		for (int i = 0; i < 4; i++)
+//		{
+//			int next_x = cur_x + x_dir[i];
+//			int next_y = cur_y + y_dir[i];
+//
+//			if (next_x < 1 || next_x > N || next_y < 1 || next_y > M)
+//				continue;
+//
+//			if (visited[next_x][next_y] == true)
+//				continue;
+//
+//			if (map[next_x][next_y] == 0)
+//				continue;
+//
+//			visited[next_x][next_y] = true;
+//			q.push(std::make_pair(next_x, next_y));
+//			dist[next_x][next_y] = dist[cur_x][cur_y] + 1;
+//		}
+//	}
+//
+//	for (int i = 1; i < N+1; i++)
+//	{
+//		for (int j = 1; j < M+1; j++)
+//		{
+//			std::cout << dist[i][j] << ' ';
+//		}
+//		std::cout << std::endl;
+//	}
+//}
+//
+//int main()
+//{
+//	std::cin >> T;
+//
+//	for (int i = 0; i < T; i++)
+//	{
+//		std::cin >> N >> M >> R >> C;
+//
+//		for (int j = 0; j < N; j++)
+//		{
+//			for (int k = 0; k < M; k++)
+//			{
+//				std::cin >> map[j + 1][k + 1];
+//			}
+//		}
+//
+//		solve(1,1);
+//	}
+//}
+
+
+// 3번 문제
+//#include <iostream>
+//#include <string>
+//#include <vector>
+//#include <queue>
+//#include <set>
+//#include <algorithm>
+//
+//int T, N, M, K;
+//std::vector<std::string> map;
+//std::vector<int> result;
+//int x_dir[4] = { 1, -1, 0, 0 };
+//int y_dir[4] = { 0, 0, 1, -1 };
+//
+//int bfs(std::vector<std::pair<int,int>> pos)
+//{
+//	std::vector<std::vector<int>> update(N, std::vector<int>(M, 0));
+//
+//	for (int i = 0; i < K; i++)
+//	{
+//		int row = pos[i].first - 1;
+//		int col = pos[i].second - 1;
+//		int count = 0;
+//		std::vector<std::vector<bool>> temp_visited(N, std::vector<bool>(M, false));
+//		std::vector<std::vector<int>> temp_check(N, std::vector<int>(M, 0));
+//
+//		std::queue<std::pair<int, int>> q;
+//
+//		temp_visited[row][col] = true;
+//		q.push(std::make_pair(row, col));
+//
+//		while (!q.empty())
+//		{
+//			int x = q.front().first;
+//			int y = q.front().second;
+//
+//			if (std::find(pos.begin(), pos.end(), std::make_pair(x+1,y+1)) != pos.end())
+//				count++;
+//
+//			q.pop();
+//
+//			for (int j = 0; j < 4; j++)
+//			{
+//				int check_x = x + x_dir[j];
+//				int check_y = y + y_dir[j];
+//
+//
+//				if (check_x < 0 || check_x >= N || check_y < 0 || check_y >= M)
+//					continue;
+//
+//				if (temp_visited[check_x][check_y] == true)
+//					continue;
+//
+//				if (map[check_x][check_y] == '#')
+//					continue;
+//
+//				temp_visited[check_x][check_y] = true;
+//				temp_check[check_x][check_y] = temp_check[x][y] + 1;
+//				q.push(std::make_pair(check_x, check_y));
+//			}
+//		}
+//
+//		if (count != K)
+//			return -1;
+//
+//		for (int j = 0; j < N; j++)
+//		{
+//			for (int k = 0; k < M; k++)
+//			{
+//				if (update[j][k] < temp_check[j][k])
+//					update[j][k] = temp_check[j][k];
+//			}
+//		}
+//	}	
+//
+//	int minTime = 10000;
+//	for (int i = 0; i < N; i++)
+//	{
+//		for (int j = 0; j < M; j++)
+//		{
+//			if (minTime > update[i][j] && update[i][j] != 0)
+//				minTime = update[i][j];
+//		}
+//	}
+//
+//	return minTime;
+//}
+//
+//int main()
+//{
+//	std::ios_base::sync_with_stdio(false);
+//	std::cin.tie(NULL);
+//	std::cout.tie(NULL);
+//
+//	std::cin >> T;
+//
+//	for (int i = 0; i < T; i++)
+//	{
+//		std::cin >> N >> M >> K;
+//
+//		std::string row;
+//		for (int j = 0; j < N; j++)
+//		{
+//			std::cin >> row;
+//			map.emplace_back(row);
+//		}
+//
+//		int x, y;
+//		std::vector<std::pair<int, int>> pos;
+//		for (int j = 0; j < K; j++)
+//		{
+//			std::cin >> x >> y;
+//			pos.emplace_back(std::make_pair(x, y));
+//		}
+//
+//		result.emplace_back(bfs(pos));
+//
+//		map.clear();
+//	}
+//
+//	for (int i = 0; i < T; i++)
+//	{
+//		std::cout << '#' << i + 1 << ' ' << result[i] << std::endl;
+//	}
+//}
+
+
+// 2번 문제
+//#include <iostream>
+//#include <vector>
+//
+//int T, N, M, K;
+//std::vector<std::vector<int>> region;
+//std::vector<char> dir = { 'e', 'w', 's', 'n' };
+//std::vector<int> result;
+//int maxCount = 0;
+//
+//void checkCase(std::vector<char> perm)
+//{
+//	std::vector<std::vector<int>> temp;
+//	temp.assign(region.size(), std::vector<int>(region.size()));
+//	std::copy(region.begin(), region.end(), temp.begin());
+//
+//	for (auto e : perm)
+//	{
+//		if (e == 'e')
+//		{
+//			for (int i = 0; i < N; i++)
+//			{
+//				for (int j = M - 1; j >= 0; j--)
+//				{
+//					if (temp[i][j] != 0 && j != 0)
+//					{
+//						temp[i][j - 1] += temp[i][j];
+//						temp[i][j] = 0;
+//
+//						break;
+//					}
+//				}
+//			}
+//		}
+//		else if (e == 'w')
+//		{
+//			for (int i = 0; i < N; i++)
+//			{
+//				for (int j = 0; j < M; j++)
+//				{
+//					if (temp[i][j] != 0 && j != M-1)
+//					{
+//						temp[i][j + 1] += temp[i][j];
+//						temp[i][j] = 0;
+//
+//						break;
+//					}
+//				}
+//			}
+//		}
+//		else if (e == 's')
+//		{
+//			for (int j = 0; j < M; j++)
+//			{
+//				for (int i = N - 1; i >= 0; i--)
+//				{
+//					if (temp[i][j] != 0 && i != 0)
+//					{
+//						temp[i-1][j] += temp[i][j];
+//						temp[i][j] = 0;
+//
+//						break;
+//					}
+//				}
+//			}
+//		}
+//		else if (e == 'n')
+//		{
+//			for (int j = 0; j < M; j++)
+//			{
+//				for (int i = 0; i < N; i++)
+//				{
+//					if (temp[i][j] != 0 && i != N-1)
+//					{
+//						temp[i + 1][j] += temp[i][j];
+//						temp[i][j] = 0;
+//						break;
+//					}
+//				}
+//			}
+//		}
+//	}
+//
+//	for (int i = 0; i < N; i++)
+//	{
+//		for (int j = 0; j < M; j++)
+//		{
+//			if (maxCount < temp[i][j])
+//				maxCount = temp[i][j];
+//		}
+//	}
+//}
+//
+//void repeatPermutation(std::vector<char> perm, int depth)
+//{
+//	if (depth == perm.size())
+//	{
+//		checkCase(perm);
+//		return;
+//	}
+//
+//	for (int i = 0; i < dir.size(); i++)
+//	{
+//		perm[depth] = dir[i];
+//		repeatPermutation(perm, depth + 1);
+//	}
+//}
+//
+//int main()
+//{
+//	std::cin >> T;
+//
+//	for (int i = 0; i < T; i++)
+//	{
+//		std::cin >> N >> M >> K;
+//
+//		for (int j = 0; j < N; j++)
+//		{
+//			std::vector<int> row;
+//			int x;
+//			for (int k = 0; k < M; k++)
+//			{
+//				std::cin >> x;
+//				row.emplace_back(x);
+//			}
+//			region.emplace_back(row);
+//			row.clear();
+//		}
+//
+//		std::vector<char> perm(K, 0);
+//		repeatPermutation(perm, 0);
+//		result.emplace_back(maxCount);
+//		maxCount = 0;
+//		region.clear();
+//	}
+//
+//	for (int i = 0; i < result.size(); i++)
+//	{
+//		std::cout << '#' << i + 1 << ' ' << result[i] << std::endl;
+//	}
+//
+//	return 0;
+//}
+
+
+
+// 1번 문제
+//#include <iostream>
+//#include <vector>
+//#include <algorithm>
+//#include <cmath>
+//
+//int T, N;
+//std::vector<int> numList;
+//bool visited[10];
+//unsigned int factorial[10] = { 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800 };
+//
+//int approximate_square_distance()
+//{
+//    int maxCount = 0;
+//    int count = 0;
+//    int n = numList.size();
+//    unsigned int idx = 0;
+//
+//    while (std::next_permutation(numList.begin(), numList.end()))
+//    {
+//        idx++;
+//        for (int i = 0; i < n; i++)
+//        {
+//            int checkNum = (i != n - 1) ? numList[i] + numList[i + 1] : numList[i] + numList[0];
+//            if (sqrt(checkNum) == (int)sqrt(checkNum))
+//                count++;
+//        }
+//
+//        if (maxCount < count)
+//        {
+//            maxCount = count;
+//        }
+//        count = 0;
+//        if (idx == factorial[N - 2] - 1)
+//            break;
+//    }
+//
+//    return maxCount;
+//}
+//
+//int main() {
+//    std::vector<int> result;
+//    std::cin >> T;
+//
+//    for (int i = 0; i < T; i++)
+//    {
+//        std::cin >> N;
+//
+//        int num;
+//        for (int j = 0; j < N; j++)
+//        {
+//            std::cin >> num;
+//            numList.emplace_back(num);
+//        }
+//
+//        result.emplace_back(approximate_square_distance());
+//        numList.clear();
+//    }
+//
+//    int n = result.size();
+//    for (int i = 0; i < n; i++)
+//    {
+//        std::cout << '#' << i + 1 << ' ' << result[i] << std::endl;
+//    }
+//}

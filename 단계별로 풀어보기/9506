@@ -1,0 +1,40 @@
+import java.io.*;
+import java.util.ArrayList;
+
+public class Main {
+    static ArrayList<Integer> arr;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        int test = Integer.parseInt(br.readLine());
+        while(test != -1) {
+            arr = new ArrayList<>();
+            for (int i = test; i > 1; i--) {
+                if (test % i == 0) {
+                    arr.add(test / i);
+                }
+            }
+
+            int sum = 0;
+            for (int i = 0; i < arr.size(); i++) {
+                sum += arr.get(i);
+            }
+
+            if (sum == test) {
+                bw.write(test + " = ");
+                for (int i = 0; i < arr.size(); i++) {
+                    if (i != arr.size() - 1) {
+                        bw.write(arr.get(i) + " + ");
+                    }
+                }
+                bw.write(arr.get(arr.size() - 1) + "\n");
+            } else {
+                bw.write(test + " is NOT perfect.\n");
+            }
+
+            test = Integer.parseInt(br.readLine());
+        }
+        bw.flush();
+    }
+}

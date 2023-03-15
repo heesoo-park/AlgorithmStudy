@@ -1,0 +1,30 @@
+import java.io.*;
+import java.util.StringTokenizer;
+
+public class Main {
+    static int[] normal = new int[6];
+    static int[] current = new int[6];
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st;
+
+        normal[0] = 1;
+        normal[1] = 1;
+        normal[2] = 2;
+        normal[3] = 2;
+        normal[4] = 2;
+        normal[5] = 8;
+
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < 6; i++) {
+            current[i] = Integer.parseInt(st.nextToken());
+        }
+
+        for (int i = 0; i < 6; i++) {
+            bw.write((normal[i] - current[i]) + " ");
+        }
+        bw.flush();
+    }
+}

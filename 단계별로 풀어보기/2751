@@ -1,0 +1,45 @@
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class Main {
+    static ArrayList<Integer> arr = new ArrayList<>();
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        int N = Integer.parseInt(br.readLine());
+        for (int i = 0; i < N; i++) {
+            arr.add(Integer.parseInt(br.readLine()));
+        }
+        Collections.sort(arr);
+
+        for (int i = 0; i < N; i++) {
+            bw.write(arr.get(i) + "\n");
+        }
+        bw.flush();
+    }
+}
+
+
+// 합병정렬 구현했지만 이걸로는 안 되네;;
+static void mergeSort(int start, int end) {
+        if (start < end) {
+            int mid = (start + end) / 2;
+            mergeSort(start, mid);
+            mergeSort(mid + 1, end);
+
+            int left = start;
+            int right = mid + 1;
+            int idx = left;
+
+            while (left <= mid || right <= end) {
+                if (right > end || (left <= mid && arr[left] < arr[right])) {
+                    result[idx++] = arr[left++];
+                } else {
+                    result[idx++] = arr[right++];
+                }
+            }
+        }
+    }

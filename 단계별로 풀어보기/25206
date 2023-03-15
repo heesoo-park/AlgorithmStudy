@@ -1,0 +1,62 @@
+import java.io.*;
+import java.util.StringTokenizer;
+
+public class Main {
+    static float sum, scoreSum;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st;
+
+        for (int i = 0; i < 20; i++) {
+            st = new StringTokenizer(br.readLine());
+            st.nextToken();
+            float score = Float.parseFloat(st.nextToken());
+            String grade = st.nextToken();
+
+            switch (grade) {
+                case "A+":
+                    sum += (score * 4.5f);
+                    scoreSum += score;
+                    break;
+                case "A0":
+                    sum += (score * 4.0f);
+                    scoreSum += score;
+                    break;
+                case "B+":
+                    sum += (score * 3.5f);
+                    scoreSum += score;
+                    break;
+                case "B0":
+                    sum += (score * 3.0f);
+                    scoreSum += score;
+                    break;
+                case "C+":
+                    sum += (score * 2.5f);
+                    scoreSum += score;
+                    break;
+                case "C0":
+                    sum += (score * 2.0f);
+                    scoreSum += score;
+                    break;
+                case "D+":
+                    sum += (score * 1.5f);
+                    scoreSum += score;
+                    break;
+                case "D0":
+                    sum += score;
+                    scoreSum += score;
+                    break;
+                case "F":
+                    scoreSum += score;
+                    break;
+                case "P":
+                    break;
+            }
+        }
+
+        bw.write(sum / scoreSum + "\n");
+        bw.flush();
+    }
+}

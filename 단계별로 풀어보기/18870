@@ -1,0 +1,66 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    static List<Integer> arr = new ArrayList<>();
+    static Map<Integer, Integer> numMap = new HashMap<>();
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st;
+
+        int N = Integer.parseInt(br.readLine());
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < N; i++) {
+            int num = Integer.parseInt(st.nextToken());
+            arr.add(num);
+        }
+        List<Integer> temp = new ArrayList<>(arr);
+        Collections.sort(temp);
+
+        int rank = 0;
+        for (int i = 0; i < N; i++) {
+            if (!numMap.containsKey(temp.get(i))) {
+                numMap.put(temp.get(i), rank++);
+            }
+        }
+
+        for (int i = 0; i < N; i++) {
+            bw.write(numMap.get(arr.get(i)) + " ");
+        }
+        bw.flush();
+    }
+}
+
+// 맞을 거 같은데 시간초과나는 코드
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    static List<Integer> arr = new ArrayList<>();
+    static Set<Integer> numSet = new HashSet<>();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st;
+
+        int N = Integer.parseInt(br.readLine());
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < N; i++) {
+            int num = Integer.parseInt(st.nextToken());
+            arr.add(num);
+            numSet.add(num);
+        }
+        List<Integer> numList = new ArrayList<>(numSet);
+        Collections.sort(numList);
+
+        for (int i = 0; i < N; i++) {
+            int currentValue = arr.get(i);
+            int index = numList.indexOf(currentValue);
+
+            bw.write(index + " ");
+        }
+        bw.flush();
+    }
+}

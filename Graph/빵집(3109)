@@ -1,0 +1,61 @@
+import java.io.*;
+import java.util.StringTokenizer;
+
+public class Main {
+    static int R,C,cnt;
+    static boolean isHome;
+    static char[][] map;
+    static boolean[][] visited;
+    static int[] dx = {-1, 0, 1};
+    static int[] dy = {1, 1, 1};
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+
+        st = new StringTokenizer(br.readLine());
+        R = Integer.parseInt(st.nextToken());
+        C = Integer.parseInt(st.nextToken());
+        map = new char[R][C];
+        visited = new boolean[R][C];
+
+        for (int i = 0; i < R; i++) {
+            String str = br.readLine();
+            for (int j = 0; j < C; j++) {
+                map[i][j] = str.charAt(j);
+            }
+        }
+
+        for (int i = 0; i < R; i++) {
+            isHome = false;
+            DFS(i, 0);
+        }
+        System.out.println(cnt);
+    }
+
+    static void DFS(int x, int y) {
+        // 1. 체크인
+        visited[x][y] = true;
+        // 2. 목적지인가?
+        if (y == C - 1) {
+            isHome = true;
+            cnt++;
+            return;
+        }
+        // 3. 연결된 곳을 순회
+        for (int i = 0; i < 3; i++) {
+            int new_x = x + dx[i];
+            int new_y = y + dy[i];
+            // 4. 갈 수 있는가?
+            if (new_x < 0 || new_x >= R || new_y >= C || map[new_x][new_y] == 'x' || visited[new_x][new_y]) {
+                continue;
+            }
+            if (isHome) {
+                continue;
+            }
+            // 5. 간다
+            DFS(new_x, new_y);
+            // 6. 체크아웃 (x)
+        }
+    }
+}

@@ -1,0 +1,211 @@
+// 도저히 감을 잡지 못한 문제
+// 블로그 힌트로 풀어보려 했지만 어떻게 크루스칼 알고리즘까지 갈 수 있는지 이해가 안 됨
+// BFS로 인덱싱하고 BFS로 다리를 만들어 클루스칼 알고리즘에서 필요한 형태의 우선순위 큐 데이터로 재가공...
+// 마지막에 그걸 가지고 union-find 연산의 크루스칼 알고리즘 사용
+// 왜 이게 골드 1인지 잘 모르겠다
+// 인덱싱까지는 가물가물하게 기억해서 할 수 있을 거 같은데 그 이후 두가지 과정은 나한테 멀다...
+
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    static int N, M;
+    static int islandIdx = 2;
+    static int[][] map;
+    static int[] parent;
+    static boolean[][] visited;
+    static Queue<int[]> q;
+    static PriorityQueue<BridgeInfo> pq = new PriorityQueue<>();
+    static int[] dx = {0, 1, 0, -1};
+    static int[] dy = {1, 0, -1, 0};
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+
+        st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+
+        map = new int[N][M];
+        for (int i = 0; i < N; i++) {
+            st = new StringTokenizer(br.readLine());
+            for (int j = 0; j < M; j++) {
+                map[i][j] = Integer.parseInt(st.nextToken());
+            }
+        }
+
+        visited = new boolean[N][M];
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                if (map[i][j] == 1 && !visited[i][j]) {
+                    Indexing_BFS(i, j, islandIdx);
+                    islandIdx++;
+                }
+            }
+        }
+        islandIdx--;
+
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                if (map[i][j] != 0) {
+                    makeBridge(i, j, map[i][j]);
+                }
+            }
+        }
+
+        parent = new int[islandIdx];
+        for (int i = 1; i < islandIdx; i++) {
+            parent[i] = i;
+        }
+        int answer = MST_Kruskal();
+        System.out.println(answer == 0 ? -1 : answer);
+    }
+
+    static void Indexing_BFS(int x, int y, int idx) {
+        q = new LinkedList<>();
+
+        q.add(new int[]{x, y});
+        map[x][y] = idx;
+        visited[x][y] = true;
+
+        while (!q.isEmpty()) {
+            // 1. 큐에서 꺼냄
+            int[] cur = q.poll();
+            int cur_x = cur[0];
+            int cur_y = cur[1];
+            // 2. 목적지인가? (x)
+            // 3. 연결된 곳을 순회
+            for (int i = 0; i < 4; i++) {
+                int new_x = cur_x + dx[i];
+                int new_y = cur_y + dy[i];
+
+                if (new_x < 0 || new_x >= N || new_y < 0 || new_y >= M) continue;
+                if (visited[new_x][new_y]) continue;
+
+                // 4. 갈 수 있는가?
+                if (map[new_x][new_y] == 1) {
+                    map[new_x][new_y] = idx;
+                    // 5. 체크인
+                    visited[new_x][new_y] = true;
+                    // 6. 큐에 넣음
+                    q.add(new int[]{new_x, new_y});
+                }
+            }
+        }
+    }
+
+    static void makeBridge(int x, int y, int idx) {
+        q = new LinkedList<>();
+        visited = new boolean[N][M];
+
+        for (int i = 0; i < 4; i++) {
+            q.add(new int[]{x, y, 0});
+            visited[x][y] = true;
+
+            while (!q.isEmpty()) {
+                // 1. 큐에서 꺼냄
+                int[] cur = q.poll();
+                int cur_x = cur[0];
+                int cur_y = cur[1];
+                int cur_l = cur[2];
+
+                // 2. 목적지인가? (x)
+                // 3. 연결된 곳을 순회
+                int new_x = cur_x + dx[i];
+                int new_y = cur_y + dy[i];
+
+                // 4. 갈 수 있는가?
+                if (new_x < 0 || new_x >= N || new_y < 0 || new_y >= M) continue;
+                if (visited[new_x][new_y]) continue;
+
+                if (map[new_x][new_y] != idx) {
+                    if (map[new_x][new_y] != 0) {
+                        int start = idx - 1;
+                        int end = map[new_x][new_y] - 1;
+                        int length = cur_l;
+
+                        if (length > 1) {
+                            pq.add(new BridgeInfo(start, end, length));
+                            break;
+                        }
+                    } else {
+                        // 5. 체크인
+                        visited[new_x][new_y] = true;
+                        // 6. 큐에 넣음
+                        q.add(new int[]{new_x, new_y, cur_l + 1});
+                    }
+                }
+            }
+            q.clear();
+        }
+    }
+
+    static int MST_Kruskal() {
+        int sum = 0;
+        int size = pq.size();
+        for (int i = 0; i < size; i++) {
+            BridgeInfo node = pq.poll();
+            int s = node.getX();
+            int e = node.getY();
+
+            if (find(s) != find(e)) {
+                sum += node.getLength();
+                union(s, e);
+            }
+        }
+
+        int s_parent = parent[1];
+        for (int i = 2; i < islandIdx; i++) {
+            if (s_parent != find(parent[i])) return 0;
+        }
+
+
+        return sum;
+    }
+
+    static int find(int x) {
+        if (parent[x] == x) return x;
+
+        int x_parent = find(parent[x]);
+        return x_parent;
+    }
+
+    static void union(int x, int y) {
+        x = find(x);
+        y = find(y);
+
+        if (x < y) {
+            parent[y] = x;
+        } else {
+            parent[x] = y;
+        }
+    }
+}
+
+class BridgeInfo implements Comparable<BridgeInfo> {
+    private int x, y, length;
+
+    public BridgeInfo(int x, int y, int length) {
+        this.x = x;
+        this.y = y;
+        this.length = length;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    @Override
+    public int compareTo(BridgeInfo o) {
+        return this.length - o.length;
+    }
+}

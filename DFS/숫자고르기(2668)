@@ -1,0 +1,48 @@
+// 문제를 보고 싸이클을 생각하지 못했다
+// 싸이클로 알고 문제를 접근하니까 매우 쉽게 풀리더라...
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class Main {
+    static int N;
+    static int[] arr = new int[101];
+    static boolean[] visited = new boolean[101];
+    static ArrayList<Integer> list = new ArrayList<>();
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        N = Integer.parseInt(br.readLine());
+        for (int i = 1; i <= N; i++) {
+            arr[i] = Integer.parseInt(br.readLine());
+        }
+
+        for (int i = 1; i <= N; i++) {
+            DFS(i, i);
+        }
+
+        bw.write(list.size() + "\n");
+        Collections.sort(list);
+        for (int i = 0; i < list.size(); i++) {
+            bw.write(list.get(i) + "\n");
+        }
+        bw.flush();
+    }
+
+    static void DFS(int s, int t) {
+        // 1. 체크인
+        visited[s] = true;
+        // 2. 목적지인가?
+        if (arr[s] == t) list.add(t);
+        // 3. 연결된 곳을 순회 && 4. 갈 수 있는가?
+        if (!visited[arr[s]]) {
+            // 5. 간다
+            DFS(arr[s], t);
+        }
+        // 6. 체크아웃
+        visited[s] = false;
+    }
+}

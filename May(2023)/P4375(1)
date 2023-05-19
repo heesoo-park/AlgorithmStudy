@@ -1,0 +1,62 @@
+import java.io.*;
+import java.math.BigInteger;
+
+public class Main {
+    //BigInteger를 이용한 브루트포스
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        String check;
+
+        // 입력이 종료될 때까지 반복하는 방법
+        while ((check = br.readLine()) != null) {
+            BigInteger i = new BigInteger("0");
+            BigInteger n = new BigInteger(check);
+            int count = 0;
+            boolean isAnswer = false;
+
+            while (!isAnswer) {
+                i = i.multiply(BigInteger.valueOf(10)).add(BigInteger.valueOf(1));
+                count++;
+
+                if (i.mod(n).equals(BigInteger.valueOf(0))) {
+                    isAnswer = true;
+                    bw.write(count + "\n");
+                }
+            }
+        }
+
+        bw.flush();
+    }
+}
+
+
+import java.io.*;
+
+public class Main {
+    //나머지 연산의 법칙을 사용한 방식
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        String check;
+
+        // 입력이 종료될 때까지 반복하는 방법
+        while ((check = br.readLine()) != null) {
+            int n = Integer.parseInt(check);
+            int i = 1;
+            int count = 1;
+
+            // (A + B) % M = ((A % M) + (B % M)) % M
+            // (A x B) % M = ((A % M) x (B % M)) % M
+            while ((i = i % n) != 0) {
+                count++;
+                i = i * 10 + 1;
+            }
+            bw.write(count + "\n");
+        }
+
+        bw.flush();
+    }
+}

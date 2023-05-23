@@ -22,7 +22,7 @@ public class Main {
     }
 }
 
-// 통과한 O(NloglogN) 풀이방법(에라토네스의 체, DP)
+// 통과한 O(NloglogN) 풀이방법(에라토스테네스의 체, DP)
 import java.io.*;
 
 public class Main {

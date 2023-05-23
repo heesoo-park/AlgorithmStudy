@@ -1,0 +1,54 @@
+// 시간초과난 O(n*sqrt(n)) 풀이방식
+import java.io.*;
+
+public class Main {
+    static long[] f_x_arr = new long[1000001];
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        int x = Integer.parseInt(br.readLine());
+        for (int i = 1; i <= x; i++) {
+            long sum = 0;
+            for (int j = 1; j <= Math.sqrt(i); j++) {
+                if (i % j == 0) {
+                    sum += j;
+                    long quotient = i / j;
+                    if (quotient != j) sum += (i / j);
+                }
+            }
+            f_x_arr[i] = sum;
+        }
+
+        long g_x = 0;
+        for (int i = 1; i <= x; i++) {
+            g_x += f_x_arr[i];
+        }
+        bw.write(g_x + "\n");
+        bw.flush();
+    }
+}
+
+// 통과한 O(n) 풀이방식
+import java.io.*;
+
+public class Main {
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        int x = Integer.parseInt(br.readLine());
+        long sum = 0;
+        
+        // x이하에서 i를 약수로 갖는 수의 개수 = x이하에서 i의 배수의 개수
+        // i가 (x/i)번만큼 등장하고 그 값을 더함
+        for (int i = 1; i <= x; i++) {
+            sum += (long) (x / i) * i;
+        }
+
+        bw.write(sum + "\n");
+        bw.flush();
+    }
+}

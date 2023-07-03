@@ -1,0 +1,58 @@
+// 맞은 풀이
+// 필요한 변수들과 어떤 순서로 재귀가 진행되는지 떠올렸지만 이후 진행 막힘...
+// 블로그의 도움을 받았다
+// 최소값, 최대값을 위해 ArrayList 쓰는 거는 생각하지 못했다.
+// 재귀 부분만 구현햇으면 쉽게 풀었을 문제인 듯 하다
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    static int K;
+    static boolean[] visited = new boolean[10];
+    static char[] inequalitySigns = new char[10];
+    static List<String> answer = new ArrayList<>();
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+
+        K = Integer.parseInt(br.readLine());
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < K; i++) {
+            inequalitySigns[i] = st.nextToken().charAt(0);
+        }
+
+        DFS("", 0);
+
+        Collections.sort(answer);
+        System.out.println(answer.get(answer.size() - 1));
+        System.out.println(answer.get(0));
+    }
+
+    static void DFS(String num, int length) {
+        if (length == K + 1) {
+            answer.add(num);
+            return;
+        }
+
+        for (int i = 0; i <= 9; i++) {
+            if (length == 0 || !visited[i] && checkSign(num.charAt(length - 1), inequalitySigns[length - 1], (char)(i + '0'))) {
+                visited[i] = true;
+                DFS(num + i, length + 1);
+                visited[i] = false;
+            }
+        }
+    }
+
+    static boolean checkSign(char prev, char sign, char next) {
+        if (sign == '<' && prev > next) {
+            return false;
+        }
+
+        if (sign == '>' && prev < next) {
+            return false;
+        }
+
+        return true;
+    }
+}

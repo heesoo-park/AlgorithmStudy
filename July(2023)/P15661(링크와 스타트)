@@ -1,0 +1,82 @@
+// 맞은 풀이
+// 이전에 풀었던 P14889번 문제를 기초로 변형해서 풀었다
+// 짝수개가 아니라서 조합을 하나 만들 때마다 차이를 계산하게 했기 때문에 시간초과가 나려나 했는데 나지 않았다(왜?)
+// 위의 의문을 제외하고는 쉽게 진행했다
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    static int N;
+    static int result = Integer.MAX_VALUE;
+    static int[][] arr;
+    static boolean[] visited;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+
+        N = Integer.parseInt(br.readLine());
+        arr = new int[N + 1][N + 1];
+        visited = new boolean[N + 1];
+        for (int i = 1; i < N + 1; i++) {
+            st = new StringTokenizer(br.readLine());
+            for (int j = 1; j < N + 1; j++) {
+                arr[i][j] = Integer.parseInt(st.nextToken());
+            }
+        }
+
+        Comb2(1, 0);
+        System.out.println(result);
+    }
+
+    static void Comb2(int idx, int count) {
+        checkDiff(count);
+
+        for (int i = idx; i < N + 1; i++) {
+            if (!visited[i]) {
+                visited[i] = true;
+                Comb2(i + 1, count + 1);
+                visited[i] = false;
+            }
+        }
+    }
+    static void checkDiff(int mCount) {
+        if (mCount == 0) {
+            return;
+        }
+
+        int Team_start = 0;
+        int Team_link = 0;
+
+        if (mCount == 1) {
+            for (int i = 1; i < N; i++) {
+                for (int j = i + 1; j < N + 1; j++) {
+                    if (!visited[i] && !visited[j]) {
+                        Team_link += arr[i][j];
+                        Team_link += arr[j][i];
+                    }
+                }
+            }
+        } else {
+            for (int i = 1; i < N; i++) {
+                for (int j = i + 1; j < N + 1; j++) {
+                    if (visited[i] && visited[j]) {
+                        Team_start += arr[i][j];
+                        Team_start += arr[j][i];
+                    } else if (!visited[i] && !visited[j]) {
+                        Team_link += arr[i][j];
+                        Team_link += arr[j][i];
+                    }
+                }
+            }
+        }
+
+        int diff = Math.abs(Team_link - Team_start);
+        if (diff == 0) {
+            System.out.println(diff);
+            System.exit(0);
+        }
+
+        result = Math.min(result, diff);
+    }
+}

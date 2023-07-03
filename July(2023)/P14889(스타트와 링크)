@@ -1,0 +1,71 @@
+// 맞은 풀이
+// 초반틀을 잡는 거는 혼자서 했지만 조합을 만드는 방법을 떠올리지 못해서 그 이후는 블로그를 참고하여 진행했다.
+// 코드를 보고 직접 손으로 그려보니 이해가 되더라
+// 더 많은 케이스일 때도 통하는 방식인지는 문제를 만나봐야지 알 거 같다
+import java.io.*;
+import java.util.StringTokenizer;
+
+public class Main {
+    static int N;
+    static int result = Integer.MAX_VALUE;
+    static int[][] arr;
+    static boolean[] visited;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+
+        N = Integer.parseInt(br.readLine());
+        arr = new int[N + 1][N + 1];
+        visited = new boolean[N + 1];
+        for (int i = 1; i < N + 1; i++) {
+            st = new StringTokenizer(br.readLine());
+            for (int j = 1; j < N + 1; j++) {
+                arr[i][j] = Integer.parseInt(st.nextToken());
+            }
+        }
+
+        Comb(1,0);
+        System.out.println(result);
+    }
+    
+    static void Comb(int idx, int length) {
+        if (length == N / 2) {
+            checkDiff();
+            return;
+        }
+        // 이 부분을 떠올리지 못함
+        for (int i = idx; i < N + 1; i++) {
+            if (!visited[i]) {
+                visited[i] = true;
+                Comb(i + 1, length + 1);
+                visited[i] = false;
+            }
+        }
+    }
+    
+    static void checkDiff() {
+        int Team_start = 0;
+        int Team_link = 0;
+
+        for (int i = 1; i < N; i++) {
+            for (int j = i + 1; j < N + 1; j++) {
+                if (visited[i] && visited[j]) {
+                    Team_start += arr[i][j];
+                    Team_start += arr[j][i];
+                } else if (!visited[i] && !visited[j]) {
+                    Team_link += arr[i][j];
+                    Team_link += arr[j][i];
+                }
+            }
+        }
+
+        int diff = Math.abs(Team_start - Team_link);
+        if (diff == 0) {
+            result = diff;
+            return;
+        }
+
+        result = Math.min(result, diff);
+    }
+}
